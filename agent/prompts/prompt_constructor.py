@@ -42,7 +42,7 @@ class PromptConstructor(object):
 
         """Return the require format for an API"""
         message: list[dict[str, str]] | str
-        if "openai" in self.lm_config.provider:
+        if self.lm_config.provider in ["openai", "vllm"]:
             if self.lm_config.mode == "chat":
                 message = [{"role": "system", "content": intro}]
                 for (x, y) in examples:
@@ -76,7 +76,7 @@ class PromptConstructor(object):
                 raise ValueError(
                     f"OpenAI models do not support mode {self.lm_config.mode}"
                 )
-        elif "huggingface" in self.lm_config.provider:
+        elif self.lm_config.provider == "huggingface":
             # https://huggingface.co/blog/llama2#how-to-prompt-llama-2
             # https://github.com/facebookresearch/llama/blob/main/llama/generation.py#L320
             if "Llama-2" in self.lm_config.model:
@@ -331,7 +331,7 @@ class MultimodalCoTPromptConstructor(CoTPromptConstructor):
     ) -> APIInput:
         """Return the require format for an API"""
         message: list[dict[str, str]] | str | list[str | Image.Image]
-        if "openai" in self.lm_config.provider:
+        if self.lm_config.provider in ["openai", "vllm"]:
             if self.lm_config.mode == "chat":
                 message = [
                     {
@@ -403,7 +403,7 @@ class MultimodalCoTPromptConstructor(CoTPromptConstructor):
                 raise ValueError(
                     f"GPT-4V models do not support mode {self.lm_config.mode}"
                 )
-        elif "anthropic" in self.lm_config.provider:
+        elif self.lm_config.provider == "anthropic":
             if self.lm_config.mode == "chat":
                 message = [
                     # {
@@ -483,7 +483,7 @@ class MultimodalCoTPromptConstructor(CoTPromptConstructor):
                 raise ValueError(
                     f"Anthropic models do not support mode {self.lm_config.mode}"
                 )
-        elif "google" in self.lm_config.provider:
+        elif self.lm_config.provider == "google":
             if self.lm_config.mode == "completion":
                 message = [
                     intro,
@@ -655,7 +655,7 @@ class MultimodalReflexionCoTPromptConstructor(CoTPromptConstructor):
     ) -> APIInput:
         """Return the require format for an API"""
         message: list[dict[str, str]] | str | list[str | Image.Image]
-        if "openai" in self.lm_config.provider:
+        if self.lm_config.provider in ["openai", "vllm"]:
             if self.lm_config.mode == "chat":
                 message = [
                     {
@@ -727,7 +727,7 @@ class MultimodalReflexionCoTPromptConstructor(CoTPromptConstructor):
                 raise ValueError(
                     f"GPT-4V models do not support mode {self.lm_config.mode}"
                 )
-        elif "anthropic" in self.lm_config.provider:
+        elif self.lm_config.provider == "anthropic":
             if self.lm_config.mode == "chat":
                 message = [
                     # {
@@ -807,7 +807,7 @@ class MultimodalReflexionCoTPromptConstructor(CoTPromptConstructor):
                 raise ValueError(
                     f"Anthropic models do not support mode {self.lm_config.mode}"
                 )
-        elif "google" in self.lm_config.provider:
+        elif self.lm_config.provider == "google":
             if self.lm_config.mode == "completion":
                 message = [
                     intro,

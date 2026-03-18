@@ -154,6 +154,12 @@ def config() -> argparse.Namespace:
     parser.add_argument("--max_tokens", type=int, default=384)
     parser.add_argument("--stop_token", type=str, default=None)
     parser.add_argument(
+        "--model_endpoint",
+        type=str,
+        default="http://localhost:8000/v1",
+        help="OpenAI-compatible API base URL used by vLLM or huggingface providers.",
+    )
+    parser.add_argument(
         "--max_retry",
         type=int,
         help="max retry times to perform generations when parsing fails",
