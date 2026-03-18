@@ -18,6 +18,8 @@ from llms import (
     generate_from_huggingface_completion,
     generate_from_openai_chat_completion,
     generate_from_openai_completion,
+    generate_from_vllm_chat_completion,
+    generate_from_vllm_completion,
     lm_config,
 )
 
@@ -56,6 +58,33 @@ def call_llm(
         else:
             raise ValueError(
                 f"OpenAI models do not support mode {lm_config.mode}"
+            )
+    elif lm_config.provider == "vllm":
+        if lm_config.mode == "chat":
+            assert isinstance(prompt, list)
+            response = generate_from_vllm_chat_completion(
+                messages=prompt,
+                model=lm_config.model,
+                model_endpoint=lm_config.gen_config["model_endpoint"],
+                temperature=lm_config.gen_config["temperature"],
+                top_p=lm_config.gen_config["top_p"],
+                max_tokens=lm_config.gen_config["max_tokens"],
+                num_outputs=num_outputs,
+            )
+        elif lm_config.mode == "completion":
+            assert isinstance(prompt, str)
+            response = generate_from_vllm_completion(
+                prompt=prompt,
+                model=lm_config.model,
+                model_endpoint=lm_config.gen_config["model_endpoint"],
+                temperature=lm_config.gen_config["temperature"],
+                max_tokens=lm_config.gen_config["max_tokens"],
+                top_p=lm_config.gen_config["top_p"],
+                stop_token=lm_config.gen_config["stop_token"],
+            )
+        else:
+            raise ValueError(
+                f"vLLM models do not support mode {lm_config.mode}"
             )
     elif lm_config.provider == "anthropic":
         assert isinstance(prompt, list)

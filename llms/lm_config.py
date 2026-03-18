@@ -34,7 +34,7 @@ def construct_llm_config(args: argparse.Namespace) -> LMConfig:
     llm_config = LMConfig(
         provider=args.provider, model=args.model, mode=args.mode
     )
-    if args.provider in ["openai", "google", "anthropic"]:
+    if args.provider in ["openai", "google", "anthropic", "vllm"]:
         llm_config.gen_config["temperature"] = args.temperature
         llm_config.gen_config["top_p"] = args.top_p
         llm_config.gen_config["context_length"] = args.context_length
@@ -42,6 +42,8 @@ def construct_llm_config(args: argparse.Namespace) -> LMConfig:
         llm_config.gen_config["stop_token"] = args.stop_token
         llm_config.gen_config["max_obs_length"] = args.max_obs_length
         llm_config.gen_config["max_retry"] = args.max_retry
+        if args.provider == "vllm":
+            llm_config.gen_config["model_endpoint"] = args.model_endpoint
     elif args.provider == "huggingface":
         llm_config.gen_config["temperature"] = args.temperature
         llm_config.gen_config["top_p"] = args.top_p

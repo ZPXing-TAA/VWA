@@ -138,6 +138,18 @@ python run.py \
   --action_set_tag som  --observation_type image_som
 ```
 
+To run against a local [vLLM](https://docs.vllm.ai/) server (OpenAI-compatible API), set the provider to `vllm` and pass the endpoint:
+```bash
+python run.py \
+  --instruction_path agent/prompts/jsons/p_cot_id_actree_3s.json \
+  --test_start_idx 0 \
+  --test_end_idx 1 \
+  --result_dir vllm_run \
+  --test_config_base_dir=config_files/test_classifieds \
+  --provider vllm --model meta-llama/Llama-3.1-8B-Instruct --mode chat \
+  --model_endpoint http://localhost:8000/v1
+```
+
 If you'd like to reproduce the results from our paper, we have also provided scripts in `scripts/` to run the full evaluation pipeline on each of the VWA environments. For example, to reproduce the results from the Classifieds environment, you can run:
 
 ```bash
